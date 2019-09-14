@@ -86,10 +86,7 @@ int find_mean(int *ptr, int size)
 	sum = 0;
 	for(i=0; i<size; ++i)
 		sum+=((ptr)[i]);
-	mean_float = (float) sum / size;	
-	mean_float += 0.5;
-	/* to round off mean. if mean is 2.1, then int(2.1+0.5) = 2; if mean is 2.7 then 
-		int(2.7+0.5) is 3 */	
+	mean_float = (float) sum / size;
 	mean = (int) mean_float;
 	return mean;
 }
