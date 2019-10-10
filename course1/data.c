@@ -22,7 +22,7 @@ uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base)
 		ptr[i] = '\0'; 
 		return 2; 
 	} 
-	if (data < 0) 
+	if (data < 0 && base == 10) 
 	{ 
 		isNegative = 1; 
 		data = -data; 
@@ -48,8 +48,6 @@ uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base)
 		start++; 
 		end--; 
 	} 
-	for(uint8_t j=0; j<i+1; ++j)
-		PRINTF("\n\t%c",*(ptr+j));
 	return (i+1); 
 } 
 
@@ -64,10 +62,7 @@ int32_t my_atoi(uint8_t* ptr, uint8_t digits, uint32_t base)
 	} 
 	for (; ptr[i] != '\0'; ++i) {
 		temp = *(ptr+i) > 'a'? *(ptr+i)-'a' : *(ptr+i)-'0'; 
-		res = (res * base) + temp; 
+		res = res * base + temp; 
 	}
-	for(uint8_t j=0; j<i+1; ++j)
-		PRINTF("\n\t%c",*(ptr+j));
-	PRINTF("\n\n\t\t%d",sign*res);	
 	return (sign * res); 
 }
