@@ -21,6 +21,7 @@
  *
  */
 #include "memory.h"
+#include "platform.h"
 #include <stdint.h>
 /***********************************************************
  Function Definitions
@@ -50,25 +51,22 @@ void clear_all(char * ptr, unsigned int size){
 
 uint8_t * my_memmove(uint8_t * src, uint8_t * dst, size_t length) {
 	uint16_t i=0;
-	uint8_t * dst2;
-	dst2=dst;
-	if (src+length<dst && src-length>dst) {
-		for (i=0; i<length; ++i) {
-			*dst=*src;
-			++src;
-			++dst;
+	uint8_t diff;
+	if ((src+length)>dst && dst>src) {
+		diff = dst-src;
+		for (i=diff; i<length; ++i) {
+			*(dst+i)=*(src+i);
+		}
+		for (i=0; i<diff; ++i) {
+			*(dst+i)=*(src+i);
 		}
 	}
 	else {
-		dst+=length;
-		dst2+=length;
 		for (i=0; i<length; ++i) {
-			*dst=*src;
-			++src;
-			++dst;
+			*(dst+i)=*(src+i);
 		}
 	}
-	return dst2;
+	return dst;
 }
 
 uint8_t * my_memcopy(uint8_t * src, uint8_t * dst, size_t length) {
@@ -117,7 +115,7 @@ uint8_t * my_reverse(uint8_t * src, size_t length) {
 	for (i=0; i<(length/2); ++i) {
 		temp=*src;
 		*src=*src3;
-		*src=temp;
+		*src3=temp;
 		++src;
 		--src3;
 	}

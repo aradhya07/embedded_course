@@ -25,6 +25,18 @@ include sources.mk
 
 FLAGS = -Wall -g -O0 -std=c99 -Werror
 
+ifeq ($(COURSE1),disable)
+	c1 = 
+else
+	c1 = -DCOURSE1
+endif
+
+ifeq ($(VERBOSE),enable)
+	v1 = -DVERBOSE
+else
+	v1 = 
+endif
+
 ifeq ($(PLATFORM),HOST)
 	CC = gcc
 	ARCH:=$(arch)
@@ -49,7 +61,7 @@ endif
 
 OBJS = $(SOURCES:.c=.o)
 %.o : %.c
-	$(CC) -DVERBOSE -DCOURSE1 -D$(PLATFORM) $(INCLUDES) -c $< $(CFLAGS) $(FLAGS) -o $@
+	$(CC) $(c1) $(v1) -D$(PLATFORM) $(INCLUDES) -c $< $(CFLAGS) $(FLAGS) -o $@
 
 PREES = $(SOURCES:.c=.i)
 %.i : %.c

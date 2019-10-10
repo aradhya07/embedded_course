@@ -38,9 +38,7 @@ void stats()
 
 	/* Statistics and Printing Functions Go Here */
 	sort_array (test,SIZE);
-#ifdef VERBOSE 
 	print_array (test,SIZE);
-#endif
 	print_statistics (test,SIZE);
 
 }
@@ -125,9 +123,13 @@ void sort_array(uint8_t *ptr, int size)
 	}
 }
 
+
 void print_array(uint8_t *ptr, int size)
 {
+	#ifdef VERBOSE
 	int i;
 	for(i=0; i<size; ++i)
 		PRINTF("\nElement number: %d --> Data: %d",i+1,(ptr)[i]);
+	#endif
 }
+

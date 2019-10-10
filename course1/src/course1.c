@@ -40,9 +40,8 @@ int8_t test_data1() {
   {
     return TEST_ERROR;
   }
-
-  digits = (uint32_t) my_itoa( num, ptr, BASE_16);   
-  value = my_atoi( ptr, digits, BASE_16);
+  digits = (uint32_t) my_itoa( num, ptr, BASE_10);   
+  value = my_atoi( ptr, digits, BASE_10);
   #ifdef VERBOSE
   PRINTF("  Initial number: %d\n", num);
   PRINTF("  Final Decimal number: %d\n", value);
@@ -92,7 +91,7 @@ int8_t test_memmove1() {
   uint8_t * ptra;
   uint8_t * ptrb;
 
-  PRINTF("test_memmove1() - NO OVERLAP\n");
+  PRINTF("\ntest_memmove1() - NO OVERLAP\n");
   set = (uint8_t*) reserve_words( MEM_SET_SIZE_W );
 
   if (! set ) 
@@ -132,7 +131,7 @@ int8_t test_memmove2() {
   uint8_t * ptra;
   uint8_t * ptrb;
 
-  PRINTF("test_memmove2() -OVERLAP END OF SRC BEGINNING OF DST\n");
+  PRINTF("\ntest_memmove2() -OVERLAP END OF SRC BEGINNING OF DST\n");
   set = (uint8_t*) reserve_words(MEM_SET_SIZE_W);
 
   if (! set )
@@ -170,7 +169,7 @@ int8_t test_memmove3() {
   uint8_t * ptra;
   uint8_t * ptrb;
 
-  PRINTF("test_memove3() - OVERLAP END OF DEST BEGINNING OF SRC\n");
+  PRINTF("\ntest_memove3() - OVERLAP END OF DEST BEGINNING OF SRC\n");
   set = (uint8_t*)reserve_words( MEM_SET_SIZE_W);
 
   if (! set ) 
@@ -211,12 +210,12 @@ int8_t test_memcopy() {
   uint8_t * ptra;
   uint8_t * ptrb;
 
-  PRINTF("test_memcopy()\n");
+  PRINTF("\ntest_memcopy()\n");
   set = (uint8_t*) reserve_words(MEM_SET_SIZE_W);
 
   if (! set ) 
   {
-    return TEST_ERROR;
+	return TEST_ERROR;
   }
   ptra = &set[0];
   ptrb = &set[16];
@@ -234,6 +233,7 @@ int8_t test_memcopy() {
   {
     if (set[i+16] != i)
     {
+      PRINTF("\nFAIL\n");
       ret = TEST_ERROR;
     }
   }
@@ -250,7 +250,7 @@ int8_t test_memset()
   uint8_t * ptra;
   uint8_t * ptrb;
 
-  PRINTF("test_memset()\n");
+  PRINTF("\ntest_memset()\n");
   set = (uint8_t*)reserve_words(MEM_SET_SIZE_W);
   if (! set )
   {
@@ -299,7 +299,7 @@ int8_t test_reverse()
                                  0x20, 0x24, 0x7C, 0x20, 0x24, 0x69, 0x68, 0x54
                                };
 
-  PRINTF("test_reverse()\n");
+  PRINTF("\ntest_reverse()\n");
   copy = (uint8_t*)reserve_words(MEM_SET_SIZE_W);
   if (! copy )
   {
@@ -329,12 +329,12 @@ void course1(void)
   uint8_t i;
   int8_t failed = 0;
   int8_t results[TESTCOUNT];
-  results[0] = test_data1();
-  results[1] = test_data2();
+  results[0] = test_data1(); 
+  results[1] = test_data2(); 
   results[2] = test_memmove1();
   results[3] = test_memmove2();
   results[4] = test_memmove3();
-  results[5] = test_memcopy();
+  results[5] = test_memcopy(); 
   results[6] = test_memset();
   results[7] = test_reverse();
 

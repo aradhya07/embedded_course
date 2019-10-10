@@ -21,18 +21,16 @@
 #      <Put a description of the supported Overrides here
 #
 #------------------------------------------------------------------------------
-#include sources.mk
+include sources.mk
+
+FLAGS = -Wall -Werror -g -O0 -std=c99
 
 ifeq ($(PLATFORM),HOST)
 	CC = gcc
 	ARCH:=$(arch)
 	OS := $(uname)
-	CFLAGS = -Wall -Werror -g -O0 -std=c99
 	TARGET = c1m2
-	LDFLAS =  
-	SRCS = main.c \
-	       memory.c 
-	INCLUDES = -I ../include/common
+	
 else
 	LINKER_FILE = msp432p401r.lds
 	CC = arm-none-eabi-gcc
@@ -43,32 +41,25 @@ else
 	TARGET = c1m2
 	LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE)
 	CFLAGS = -mcpu=$(CPU) -m$(ARCH) --specs=$(SPECS) -march=armv7e-m \
-		 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wall -Werror -g -O0 -std=c99
-	SRCS = main.c \
-	       interrupts_msp432p401r_gcc.c \
-	       memory.c \
-	       startup_msp432p401r_gcc.c \
-	       system_msp432p401r.c
-	
-	INCLUDES = -I ../include/CMSIS -I ../include/common -I ../include/msp432
+		 -mfloat-abi=hard -mfpu=fpv4-sp-d16
 endif
 
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SOURCES:.c=.o)
 %.o : %.c
-	$(CC) -D$(PLATFORM) $(INCLUDES) -c $< $(CFLAGS) -o $@
+	$(CC) -D$(PLATFORM) $(INCLUDES) -c $< $(CFLAGS) $(FLAGS) -o $@
 
-PREES = $(SRCS:.c=.i)
+PREES = $(SOURCES:.c=.i)
 %.i : %.c
-	$(CC) -D$(PLATFORM) $(INCLUDES) -E $< $(CFLAGS) -o $@
+	$(CC) -D$(PLATFORM) $(INCLUDES) -E $< $(CFLAGS) $(FLAGS) -o $@
 
-ASMBS = $(SRCS:.c=.asm)
+ASMBS = $(SOURCES:.c=.asm)
 %.asm : %.c
-	$(CC) -D$(PLATFORM) $(INCLUDES) -S $< $(CFLAGS) -o $@
+	$(CC) -D$(PLATFORM) $(INCLUDES) -S $< $(CFLAGS) $(FLAGS) -o $@
 
-DEPS = $(SRCS:.c=.d)
+DEPS = $(SOURCES:.c=.d)
 %.d : %.c
-	$(CC) -D$(PLATFORM) $(INCLUDES) -M $< $(CFLAGS) -o $@
+	$(CC) -D$(PLATFORM) $(INCLUDES) -M $< $(CFLAGS) $(FLAGS) -o $@
 
 .PHONY: compile-all
 compile-all: $(OBJS)
@@ -77,8 +68,8 @@ compile-all: $(OBJS)
 build:  $(TARGET).out $(ASMBS) $(PREES) $(DEPS)
 
 $(TARGET).out: $(OBJS)
-	$(CC) -D$(PLATFORM) $(INCLUDES) $(OBJS) $(CFLAGS) $(LDFLAGS) -o $@
+	$(CC) -D$(PLATFORM) $(INCLUDES) $(OBJS) $(CFLAGS) $(LDFLAGS) $(FLAGS) -o $@
 
 .PHONY: clean
 clean:
-	rm -f $(OBJS) $(TARGET).out $(TARGET).map $(ASMBS) $(PREES) $(DEPS)
+	rm -f $(OBJS) $(TARGET).out $(TARGET).map $(ASMBS) $(PREES) $(DEPS) 
